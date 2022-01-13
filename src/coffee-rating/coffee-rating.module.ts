@@ -8,6 +8,7 @@ import { CoffeeRatingService } from './coffee-rating.service';
     type: 'postgres',
     host: 'localhost',
     password: 'pass123',
+    username: 'postgres',
     port: 5432
   })],
   providers: [CoffeeRatingService]

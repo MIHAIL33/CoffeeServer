@@ -7,6 +7,8 @@ import { CoffeesController } from './coffees.controller';
 import { CoffeesService } from './coffees.service';
 import { Coffee } from './entities/coffee.entity';
 import { Flavor } from './entities/flavor.entity';
+import { ConfigModule } from '@nestjs/config'
+import coffeesConfig from './config/coffees.config';
 
 // class MockCoffeesService {}
 // providers: [{ provide: CoffeesService, useValue: new MockCoffeesService() }]
@@ -24,15 +26,19 @@ export class CoffeeBrandsFactory {
 }
 
 @Module({
-    imports: [TypeOrmModule.forFeature([Coffee, Flavor, Event])],
+    imports: [
+        TypeOrmModule.forFeature([Coffee, Flavor, Event]), 
+        ConfigModule.forFeature(coffeesConfig)
+    ],
     controllers: [CoffeesController],
     providers: [
         CoffeesService,
         CoffeeBrandsFactory,
-        { 
-            provide: ConfigService, 
-            useClass: process.env.NODE_ENV === 'development' ? DevelopmentConfigService : ProductionConfigService},
-        { provide: COFFEE_BRANDS, useFactory: (brandsFactory: CoffeeBrandsFactory) => brandsFactory.create(), inject: [CoffeeBrandsFactory], scope: Scope.TRANSIENT}
+        // { 
+        //     provide: ConfigService, 
+        //     useClass: process.env.NODE_ENV === 'development' ? DevelopmentConfigService : ProductionConfigService
+        // },
+        //{ provide: COFFEE_BRANDS, useFactory: (brandsFactory: CoffeeBrandsFactory) => brandsFactory.create(), inject: [CoffeeBrandsFactory], scope: Scope.TRANSIENT}
     ],
     exports: [CoffeesService]
 })
